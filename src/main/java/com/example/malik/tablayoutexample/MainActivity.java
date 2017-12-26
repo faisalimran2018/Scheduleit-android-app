@@ -1,9 +1,10 @@
 package com.example.malik.tablayoutexample;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -17,32 +18,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static boolean serviceWorking = false;
+    public static boolean silentOrNot = false;
+    public static String callOrMeeting="";
+    public static String callingNumber="";
+    public static String callingTime="";
      public Fragment fragment;
      public CustomListView customListViewMonday;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+     private SectionsPagerAdapter mSectionsPagerAdapter;
+     private ViewPager mViewPager;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+
+     public class ServiceStarter implements Runnable {
+         @Override
+         public void run() {
+             Intent intentServiceStarter =  new Intent(getBaseContext(),SilentSchedule.class);
+             startService(intentServiceStarter);
+         }
+     }
 
 
     // getting current fragment
@@ -58,14 +61,48 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("Caller", callingNumber);
+        outState.putString("Time", callingTime);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        callingNumber = savedInstanceState.getString("Caller");
+        callingTime = savedInstanceState.getString("Time");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setLogo(R.drawable.round);
 
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        // Starting Broadcast Receiver
+        SMSCALLReceiver smscallReceiver = new SMSCALLReceiver();
+        CallReceiver callReceiver = new CallReceiver();
+
+        Calendar calendar = Calendar.getInstance();
+        Date systemTime = calendar.getTime();
+        String timeString =  systemTime.toString();
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:a");
+        String formattedTime = df.format(calendar.getTime());
+        String[] hour = formattedTime.split(":");
+
+        // Starting Service
+//        Intent intentServiceStarter =  new Intent(getBaseContext(),SilentSchedule.class);
+//        startService(intentServiceStarter);
+
+//        Toast.makeText(this,"Main Activity",Toast.LENGTH_LONG).show();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this,add_schedule.class);
                 startActivity(intent);
+                finish();
 
 
 
@@ -114,9 +152,6 @@ public class MainActivity extends AppCompatActivity {
          //get the optio which is selected from menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -127,23 +162,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
         private static final String ARG_SECTION_NUMBER = "section_number";
-
         public PlaceholderFragment() {
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();

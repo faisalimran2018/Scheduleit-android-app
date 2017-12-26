@@ -1,7 +1,10 @@
 package com.example.malik.tablayoutexample;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +51,7 @@ public class CustomListView extends BaseAdapter {
         view = inflater.inflate(R.layout.custom_list, null);
 
         TextView textType = view.findViewById(R.id.typeDes);
-        TextView textTime = view.findViewById(R.id.timeDes);
+        final TextView textTime = view.findViewById(R.id.timeDes);
         ImageButton deleteButton =view.findViewById(R.id.delete);
 
         //textNumber.setText(i);
@@ -58,15 +61,60 @@ public class CustomListView extends BaseAdapter {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String day = timeArray.get(i).day;
-                String startTime = timeArray.get(i).startTime;
-                String endTime = timeArray.get(i).endTime;
-                String type = timeArray.get(i).type;
-                //(day+":"+startTime+":"+endTime+":"+type);
-                timeArray.remove(i);
-                notifyDataSetChanged();
-                Thread thread = new Thread(new deleteTimeSlot(day,startTime,endTime,type));
-                thread.start();
+
+
+//                Dialog dialog = new Dialog(activity);
+//                dialog.setTitle("Delete Alert");
+//                TextView textView = new TextView(activity);
+//                textView.setText("Are you sure, you want to delete this !");
+//                dialog.setContentView(textView);
+//                dialog.show();
+
+                AlertDialog alertDialog = new AlertDialog.Builder(
+                        activity).create();
+
+                // Setting Dialog Title
+                alertDialog.setTitle("Delete Alert !");
+
+                // Setting Dialog Message
+                alertDialog.setMessage("Are you sure ?");
+
+                // Setting Icon to Dialog
+                alertDialog.setIcon(R.drawable.delete);
+
+                // Setting OK Button
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String day = timeArray.get(i).day;
+                        String startTime = timeArray.get(i).startTime;
+                        String endTime = timeArray.get(i).endTime;
+                        String type = timeArray.get(i).type;
+                        //(day+":"+startTime+":"+endTime+":"+type);
+                        timeArray.remove(i);
+                        notifyDataSetChanged();
+                        Thread thread = new Thread(new deleteTimeSlot(day,startTime,endTime,type));
+                        thread.start();
+                    }
+                });
+
+                alertDialog.setButton2("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog closed
+                        //Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                // Showing Alert Message
+                alertDialog.show();
+
+
+
+
+
+
+
+
 
 
             }

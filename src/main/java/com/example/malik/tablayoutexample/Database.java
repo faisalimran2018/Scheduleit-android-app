@@ -112,6 +112,42 @@ public class Database extends SQLiteOpenHelper {
 
 
 
+
+
+
+    public ArrayList<TimeSlot> getData(){
+
+        //String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DAY +"=?);";
+        String query  = "SELECT * FROM timeInWeek";
+        db = getReadableDatabase();
+        Cursor c = db.rawQuery(query,null);
+        ArrayList<TimeSlot> values = new ArrayList<TimeSlot>();
+        c.moveToFirst();
+        int curserStatus=c.getCount();
+        int i=0;
+        while (i<curserStatus) {
+
+            {
+                values.add(new TimeSlot(
+                        c.getString(c.getColumnIndex(COLUMN_DAY)),
+                        c.getString(c.getColumnIndex(COLUMN_STARTTIME)),
+                        c.getString(c.getColumnIndex(COLUMN_ENDTIME)),
+                        c.getString(c.getColumnIndex(COLUMN_TYPE)))
+                );
+                c.moveToNext();
+                i++;
+            }
+            db.close();
+        }
+        return values;
+    }
+
+
+
+
+
+
+
     public boolean addTimeSlot(String day,String startTime, String endTime,String type){
         if(!alreadyExist(day,startTime,endTime,type)){
             ContentValues values = new ContentValues();

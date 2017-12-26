@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/a"
     tools:context="com.example.malik.tablayoutexample.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -91,6 +92,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorPrimary"
+        android:tint="#ffffff"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.design.widget.CoordinatorLayout>

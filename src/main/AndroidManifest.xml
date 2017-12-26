@@ -3,10 +3,16 @@
     package="com.example.malik.tablayoutexample">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/timespan"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -22,6 +28,29 @@
             </intent-filter>
         </activity>
         <activity android:name=".add_schedule"></activity>
+
+        <receiver android:name=".SMSCALLReceiver" android:exported="true" >
+            <intent-filter android:priority="999" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".CallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".OnSlientReceiver">
+            <intent-filter>
+                <action android:name="com.example.malik.tablayoutexample.Ringer_Mode" />
+            </intent-filter>
+        </receiver>
+
+
+        <service android:name=".SilentSchedule" />
+
+
     </application>
 
 </manifest>

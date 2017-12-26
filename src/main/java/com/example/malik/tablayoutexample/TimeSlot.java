@@ -9,6 +9,7 @@ public class TimeSlot {
     public String startTime;
     public String endTime;
     public String type;
+    public boolean serviceRunning;
 
 
     public TimeSlot(String day, String startTime, String endTime,String type){
