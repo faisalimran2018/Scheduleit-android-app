@@ -57,7 +57,7 @@ public class SilentSchedule extends IntentService {
 
 
     public boolean endTimeReach(int cHour, int eHour, int cMin, int eMin, String sAMPM, String eAMPM){
-        if(sAMPM.equals(eAMPM) && cHour==eHour && cMin>=eMin){
+        if(sAMPM.equalsIgnoreCase(eAMPM) && cHour==eHour && cMin>=eMin){
             Log.i(TAG, "endTimeReach: True");
             return true;
         }
@@ -78,7 +78,7 @@ public class SilentSchedule extends IntentService {
             currentHour = currentHour-12;
         }
 
-        Log.i(TAG, "inStartTime: Current Hour"+ hour);
+        Log.i(TAG, "inStartTime: Current Hour"+ currentHour);
         Log.i(TAG, "inStartTime: "+dayData.size());
 
 
@@ -96,7 +96,7 @@ public class SilentSchedule extends IntentService {
             String datbaseAMPM = DatabaseTime[2];
 
 
-            if(datbaseAMPM.equals(AMPM) && (currentHour==databaseHour) && (currentMin>=databaseMinute &&
+            if(datbaseAMPM.equalsIgnoreCase(AMPM) && (currentHour==databaseHour) && (currentMin>=databaseMinute &&
                     !endTimeReach(currentHour,databaseEndHour,currentMin,databaseEndMinutes,AMPM,databaseEndAMAPM))){
                 Log.i(TAG, "inStartTime: Time Matched");
                 return Integer.toString(i);

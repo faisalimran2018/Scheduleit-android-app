@@ -74,13 +74,13 @@ public class CustomListView extends BaseAdapter {
                         activity).create();
 
                 // Setting Dialog Title
-                alertDialog.setTitle("Delete Alert !");
+                //alertDialog.setTitle("Delete Alert !");
 
                 // Setting Dialog Message
-                alertDialog.setMessage("Are you sure ?");
+                alertDialog.setMessage("Do you want to delete this slot?");
 
                 // Setting Icon to Dialog
-                alertDialog.setIcon(R.drawable.delete);
+                //alertDialog.setIcon(R.drawable.delete);
 
                 // Setting OK Button
                 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
@@ -94,13 +94,13 @@ public class CustomListView extends BaseAdapter {
                         notifyDataSetChanged();
                         Thread thread = new Thread(new deleteTimeSlot(day,startTime,endTime,type));
                         thread.start();
+                        Toast.makeText(activity,"Successfully Deleted",Toast.LENGTH_LONG).show();
                     }
                 });
 
                 alertDialog.setButton2("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to execute after dialog closed
-                        //Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity,"Didn't Deleted",Toast.LENGTH_LONG).show();
                     }
                 });
 

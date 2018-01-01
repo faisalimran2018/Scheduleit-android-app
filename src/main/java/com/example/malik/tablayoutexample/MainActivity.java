@@ -1,9 +1,14 @@
 package com.example.malik.tablayoutexample;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -75,17 +80,31 @@ public class MainActivity extends AppCompatActivity {
         callingTime = savedInstanceState.getString("Time");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        mToolbar.setLogo(R.drawable.round);
 
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        NotificationManager notificationManager =
+//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+//                && !notificationManager.isNotificationPolicyAccessGranted()) {
+//
+//            Intent intent = new Intent(
+//                    android.provider.Settings
+//                            .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+//
+//            startActivity(intent);
+//        }
+
+
+//        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(mToolbar);
+//        mToolbar.setLogo(R.drawable.round);
+
 
         // Starting Broadcast Receiver
         SMSCALLReceiver smscallReceiver = new SMSCALLReceiver();
@@ -99,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         String[] hour = formattedTime.split(":");
 
         // Starting Service
-//        Intent intentServiceStarter =  new Intent(getBaseContext(),SilentSchedule.class);
-//        startService(intentServiceStarter);
+        Intent intentServiceStarter =  new Intent(getBaseContext(),SilentSchedule.class);
+        startService(intentServiceStarter);
 
 //        Toast.makeText(this,"Main Activity",Toast.LENGTH_LONG).show();
 
@@ -179,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;

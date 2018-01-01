@@ -134,7 +134,7 @@ public class add_schedule extends AppCompatActivity implements
                 Intent intent = new Intent(add_schedule.this,MainActivity.class);
                 startActivity(intent);
                 finish();
-                Toast.makeText(getApplicationContext(),"After Addition",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Successfully Added",Toast.LENGTH_LONG).show();
 
 
             }
